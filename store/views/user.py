@@ -1,21 +1,15 @@
-from django.contrib.auth.hashers import make_password
-from django.contrib import messages
 from django.contrib.auth import login, logout
 from django.contrib.auth.forms import AuthenticationForm
-from django.shortcuts import render, redirect, get_object_or_404
-from .models import Product, User, Cart, CartItem
-from .backends import CustomUserModelBackend
-from django.contrib.auth.decorators import login_required
+from store.backends import CustomUserModelBackend
+from django.shortcuts import render, redirect
+from store.forms import UserCreationForm, UserProfileForm
+from store.models import User, PasswordResetRequest
 from django.views.decorators.csrf import csrf_protect
+from django.contrib.auth.decorators import login_required
 from django.core.mail import send_mail
 from django.utils.crypto import get_random_string
-from .models import PasswordResetRequest
-from .forms import UserProfileForm, UserCreationForm
-
-
-def home(request):
-    products = Product.objects.all()
-    return render(request, "home.html", {"products": products})
+from django.contrib import messages
+from django.contrib.auth.hashers import make_password
 
 
 def user_signup(request):
@@ -74,105 +68,6 @@ def user_login(request):
 def user_logout(request):
     logout(request)
     return redirect("home")
-
-
-def product_detail(request, product_id):
-    product = get_object_or_404(Product, id=product_id)
-    return render(request, "product_detail.html", {"product": product})
-
-
-@login_required
-def cart(request):
-    try:
-        cart = Cart.objects.get(user=request.user)
-        cart_items = cart.cartitem_set.all()
-    except Cart.DoesNotExist:
-        cart = None
-        cart_items = None
-        message = "Your cart is empty. Please add items to your cart before proceeding."
-        return render(request, "cart.html", {"message": message})
-
-    return render(request, "cart.html", {"cart": cart, "cart_items": cart_items})
-
-
-@login_required
-def add_to_cart(request, product_id):
-    user = request.user
-    product = get_object_or_404(Product, id=product_id)
-
-    cart, created = Cart.objects.get_or_create(user=user)
-
-    cart_item, item_created = CartItem.objects.get_or_create(cart=cart, product=product)
-
-    if not item_created:
-        cart_item.quantity += 1
-        cart_item.save()
-    return redirect("cart")
-
-
-@csrf_protect
-@login_required
-def remove_from_cart(request, cart_item_id):
-    cart_item = get_object_or_404(CartItem, id=cart_item_id)
-
-    if cart_item.quantity > 1:
-        cart_item.quantity -= 1
-        cart_item.save()
-    else:
-        cart_item.delete()
-
-    return redirect("cart")
-
-
-@csrf_protect
-@login_required
-def buy(request, cart_id):
-    cart = get_object_or_404(Cart, id=cart_id)
-    cart.status = "PENDING"
-    cart.save()
-    return redirect("cart")
-
-
-def search_product(request):
-    if request.method == "GET":
-        product_name = request.GET.get("product_name")
-        products = Product.objects.filter(product_name__icontains=product_name)
-        return render(request, "search_results.html", {"products": products})
-
-
-def filter_product(request):
-    min_price = request.GET.get("min_price")
-    max_price = request.GET.get("max_price")
-
-    products = Product.objects.all()
-
-    if min_price:
-        products = products.filter(price_int__gte=int(min_price))
-
-    if max_price:
-        products = products.filter(price_int__lte=int(max_price))
-
-    return render(request, "search_results.html", {"products": products})
-
-
-def search_and_filter(request):
-    if request.method == "GET":
-        product_name = request.GET.get("product_name")
-        min_price = request.GET.get("min_price")
-        max_price = request.GET.get("max_price")
-
-        products = Product.objects.all()
-
-        if product_name:
-            products = products.filter(product_name__icontains=product_name)
-
-        if min_price:
-            products = products.filter(price_int__gte=int(min_price))
-
-        if max_price:
-            products = products.filter(price_int__lte=int(max_price))
-
-        return render(request, "search_results.html", {"products": products})
 
 
 def password_reset_request(request):

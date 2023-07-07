@@ -16,23 +16,19 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from store.views import (
-    home,
+
+from store.views.page import home, product_detail
+from store.views.cart import cart, add_to_cart, remove_from_cart, buy, create_cart
+from store.views.product import search_product, filter_product, search_and_filter
+from store.views.user import (
+    user_signup,
     user_login,
     user_logout,
-    user_signup,
-    cart,
-    add_to_cart,
-    product_detail,
-    remove_from_cart,
-    buy,
-    search_product,
-    filter_product,
-    search_and_filter,
-    password_reset,
-    password_reset_request,
     user_profile,
+    password_reset_request,
+    password_reset,
 )
+
 
 urlpatterns = [
     path("admin/", admin.site.urls),
@@ -61,4 +57,5 @@ urlpatterns = [
     ),
     path("password-reset/<str:token>/", password_reset, name="password_reset"),
     path("profile/", user_profile, name="user_profile"),
+    path("create-cart/", create_cart, name="create_cart"),
 ]

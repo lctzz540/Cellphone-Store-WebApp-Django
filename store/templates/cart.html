@@ -67,38 +67,37 @@
   }
 </style>
 <!-- cart.html -->
+{% for cart in user.carts.all %}
 <div class="delivery-info">
-<h1>Cart</h1>
-<table>
-  <thead>
-    <tr>
-      <th>Product</th>
-      <th>Quantity</th>
-      <th>Unit price</th>
-      <th>Total</th>
-      {% if cart.status == "NOTCLOSED" %}
-      <th>Action</th>
-      {% endif %}
-    </tr>
-  </thead>
-  <tbody>
-    {% for cart_item in cart.cartitem_set.all %}
-    <tr>
-      <td>{{ cart_item.product.product_name }}</td>
-      <td>{{ cart_item.quantity }}</td>
-      <td>{{ cart_item.product.price }}</td>
-      <td>{{ cart_item.get_total }}</td>
-      {% if cart.status == "NOTCLOSED" %}
-      <td style="display:flex">
-        <a class="remove-button" href="/remove_from_cart/{{ cart_item.id }}">-</a>
-        <a class="add-button" href="/add_to_cart/{{ cart_item.product.id }}">+</a>
-      </td>
-      {% endif %}
-    </tr>
-    {% endfor %}
-  </tbody>
-</table>
-
+  <table>
+    <thead>
+      <tr>
+        <th>Product</th>
+        <th>Quantity</th>
+        <th>Unit price</th>
+        <th>Total</th>
+        {% if cart.status == "NOTCLOSED" %}
+        <th>Action</th>
+        {% endif %}
+      </tr>
+    </thead>
+    <tbody>
+      {% for cart_item in cart.cartitem_set.all %}
+      <tr>
+        <td>{{ cart_item.product.product_name }}</td>
+        <td>{{ cart_item.quantity }}</td>
+        <td>{{ cart_item.product.price }}</td>
+        <td>{{ cart_item.get_total }}</td>
+        {% if cart.status == "NOTCLOSED" %}
+        <td style="display:flex">
+          <a class="remove-button" href="/remove_from_cart/{{ cart_item.id }}">-</a>
+          <a class="add-button" href="/add_to_cart/{{ cart_item.product.id }}">+</a>
+        </td>
+        {% endif %}
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
 
   <h3>Delivery Information</h3>
   <p>Name: {{ cart.user.username }}</p>
@@ -106,8 +105,16 @@
   <p>Phone: {{ cart.user.phone_number }}</p>
   <p class="cart-total">Cart Total: {{ cart.get_total }}</p>
   <p class="status">Status: {{ cart.status }}</p>
-  {% if cart.status == "NOTCLOSED" %}
+{% if cart.status == "NOTCLOSED" and cart.products.count != 0 %}
   <a class="buy-button" href="/buy/{{ cart.id }}">Buy</a>
   {% endif %}
+{% if forloop.last %}
+  {% if cart.status != "NOTCLOSED" %}
+<a href="{% url 'create_cart' %}">Create New Cart</a>
+  {% endif %}
+{% endif %}
 </div>
+{% endfor %}
+
+
 {% endblock %}

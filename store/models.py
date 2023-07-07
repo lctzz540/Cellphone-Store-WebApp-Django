@@ -39,7 +39,6 @@ class User(AbstractUser):
 
 class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    # Add additional fields for user information
     phone_number = models.CharField(max_length=20)
     address = models.CharField(max_length=255)
 
@@ -53,7 +52,7 @@ class Cart(models.Model):
         ("ALREADY", "Already"),
     )
 
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="carts")
     products = models.ManyToManyField(Product, through="CartItem")
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
