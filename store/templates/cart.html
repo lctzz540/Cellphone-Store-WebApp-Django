@@ -1,4 +1,4 @@
-{% extends 'base.html' %} 
+{% extends 'base.html' %}
 {% block content %}
 
 <style>
@@ -34,23 +34,40 @@
     color: white;
     text-decoration: none;
     padding: 5px 10px;
-    margin-right:3px;
+    margin-right: 3px;
   }
+
   .add-button {
     background-color: green;
     color: white;
     text-decoration: none;
     padding: 5px 10px;
   }
+
   .buy-button {
     background-color: blue;
     color: white;
     text-decoration: none;
     padding: 5px 10px;
   }
-</style>
 
+  .delivery-info {
+    margin-top: 20px;
+    padding: 10px;
+    background-color: #f2f2f2;
+  }
+
+  .delivery-info h3 {
+    font-size: 18px;
+    margin-bottom: 10px;
+  }
+
+  .delivery-info p {
+    margin-bottom: 5px;
+  }
+</style>
 <!-- cart.html -->
+<div class="delivery-info">
 <h1>Cart</h1>
 <table>
   <thead>
@@ -59,9 +76,9 @@
       <th>Quantity</th>
       <th>Unit price</th>
       <th>Total</th>
-      {%if cart.status == "NOTCLOSED"%}
-        <th>Action</th>
-      {%endif%}
+      {% if cart.status == "NOTCLOSED" %}
+      <th>Action</th>
+      {% endif %}
     </tr>
   </thead>
   <tbody>
@@ -71,20 +88,26 @@
       <td>{{ cart_item.quantity }}</td>
       <td>{{ cart_item.product.price }}</td>
       <td>{{ cart_item.get_total }}</td>
-      {%if cart.status == "NOTCLOSED"%}
+      {% if cart.status == "NOTCLOSED" %}
       <td style="display:flex">
-          <a class="remove-button" href="/remove_from_cart/{{ cart_item.id }}">-</a>
-          <a class="add-button" href="/add_to_cart/{{ cart_item.product.id }}">+</a>
+        <a class="remove-button" href="/remove_from_cart/{{ cart_item.id }}">-</a>
+        <a class="add-button" href="/add_to_cart/{{ cart_item.product.id }}">+</a>
       </td>
-      {%endif%}
+      {% endif %}
     </tr>
     {% endfor %}
   </tbody>
 </table>
-<p class="cart-total" style="color:white">Cart Total: {{ cart.get_total }}</p>
-<p class="status" style="color:white">Status: {{ cart.status }}</p>
-{%if cart.status == "NOTCLOSED"%}
-<a class="buy-button" href="/buy/{{ cart.id }}">Buy</a>
-{%endif%}
 
+
+  <h3>Delivery Information</h3>
+  <p>Name: {{ cart.user.username }}</p>
+  <p>Address: {{ cart.user.address }}</p>
+  <p>Phone: {{ cart.user.phone_number }}</p>
+  <p class="cart-total">Cart Total: {{ cart.get_total }}</p>
+  <p class="status">Status: {{ cart.status }}</p>
+  {% if cart.status == "NOTCLOSED" %}
+  <a class="buy-button" href="/buy/{{ cart.id }}">Buy</a>
+  {% endif %}
+</div>
 {% endblock %}
