@@ -1,0 +1,60 @@
+
+{% extends 'base.html' %} {% block content %}
+<style>
+  .login-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+  }
+
+  .login-form {
+    background-color: white;
+    padding: 30px;
+    border-radius: 7%;
+    margin-bottom: 10px;
+  }
+
+  .login-form label {
+    display: block;
+    font-weight: bold;
+  }
+
+  .login-form input {
+    padding: 5px;
+    width: 200px;
+    margin-bottom: 5px;
+  }
+
+  .login-form input[type="submit"] {
+    padding: 8px 16px;
+    background-color: #4caf50;
+    color: white;
+    border: none;
+    cursor: pointer;
+  }
+
+  .forgot-password-link {
+    text-align: center;
+    margin-top: 10px;
+  }
+</style>
+<div class="login-container">
+  <form method="post" class="login-form">
+    <h2>Login</h2>
+    {% csrf_token %}
+    <div>
+      <label for="username">Username:</label>
+      <input type="text" id="username" name="username" />
+    </div>
+    <div>
+      <label for="password">Password:</label>
+      <input type="password" id="password" name="password" />
+    </div>
+    <input type="submit" value="Login" />
+  <div class="forgot-password-link">
+    <a href="{% url 'password_reset_request' %}">Forgot Password?</a>
+  </div>
+  </form>
+</div>
+{% endblock %}

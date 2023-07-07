@@ -1,0 +1,60 @@
+{% extends 'base.html' %} {% block content %}
+<style>
+  .product-detail {
+    background-color: white;
+    text-align: center;
+    padding: 7%;
+    margin-top: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .product-detail h1 {
+    font-size: 24px;
+    margin-bottom: 10px;
+  }
+
+  .product-detail img {
+    max-width: 300px;
+    height: auto;
+    margin-bottom: 20px;
+    margin-right: 20px;
+  }
+
+  .product-detail p {
+    font-size: 16px;
+    margin-bottom: 5px;
+    text-align: left;
+  }
+
+  .add-to-cart-btn {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #4caf50;
+    color: white;
+    text-decoration: none;
+    border-radius: 4px;
+    margin-top: 10px;
+  }
+</style>
+
+<div class="product-detail">
+  <img src="{{ product.image_link }}" alt="Product Image" />
+  <div>
+    <h1>{{ product.product_name }}</h1>
+    <p>Screen: {{ product.screen }}</p>
+    <p>RAM: {{ product.RAM }}</p>
+    <p>ROM: {{ product.ROM }}</p>
+    <p>Price: {{ product.price }}</p>
+    {% if user.is_authenticated %}
+    <a href="{% url 'add_to_cart' product_id=product.id %}" class="add-to-cart-btn">Add to Cart</a>
+    {% else %}
+    <p>
+      Please <a href="/login">login</a> to add this item to your
+      cart.
+    </p>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

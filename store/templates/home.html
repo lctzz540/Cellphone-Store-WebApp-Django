@@ -1,0 +1,119 @@
+
+{% extends 'base.html' %} {% block content %}
+
+<style>
+  .card {
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 10px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+  }
+
+  .card-container {
+    background-color: white;
+    margin: 7%;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    margin-bottom: 20px;
+  }
+
+  .card-container .card {
+    flex-basis: 19%;
+    margin: 20px;
+  }
+
+  .card img {
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+    border-radius: 5px;
+    margin-bottom: 10px;
+  }
+
+  .card-title {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 10px;
+  }
+
+  .card-text {
+    margin-bottom: 5px;
+  }
+  
+  .price-filter-container {
+    margin-bottom: 20px;
+  }
+
+  .price-filter-select {
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 14px;
+    width: 150px;
+  }
+
+  .price-filter-button {
+    margin-left: 10px;
+    padding: 5px 10px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+</style>
+
+<div class="price-filter-container">
+  <label class="price-filter-label" for="price-range">Price Range:</label>
+  <select id="price-range" class="price-filter-select" name="price_range">
+    <option value="0">Any</option>
+    <option value="<5000000">Less than 5,000,000</option>
+    <option value="5000000-10000000">5,000,000 - 10,000,000</option>
+    <option value="10000000-15000000">10,000,000 - 15,000,000</option>
+    <option value="15000000-20000000">15,000,000 - 20,000,000</option>
+    <option value=">20000000">Greater than 20,000,000</option>
+  </select>
+  <button class="price-filter-button" onclick="applyPriceFilter()">Apply</button>
+</div>
+
+<div class="card-container">
+  {% for product in products %}
+  <div class="card" onclick="viewProduct('{{ product.id }}')">
+    <img src="{{ product.image_link }}" alt="Product Image" />
+    <div class="card-title">{{ product.product_name }}</div>
+    <div class="card-text">Screen: {{ product.screen }}</div>
+    <div class="card-text">RAM: {{ product.RAM }}</div>
+    <div class="card-text">ROM: {{ product.ROM }}</div>
+    <div class="card-text">Price: {{ product.price }}</div>
+  </div>
+  {% endfor %}
+</div>
+
+<script>
+  function viewProduct(productId) {
+    window.location.href = "/product-detail/" + productId;
+  }
+  
+  function applyPriceFilter() {
+    var priceRange = document.getElementById("price-range").value;
+    var url = "/search/filter/?";
+
+    if (priceRange === "<5000000") {
+      url += "min_price=0&max_price=5000000";
+    } else if (priceRange === "5000000-10000000") {
+      url += "min_price=5000000&max_price=10000000";
+    } else if (priceRange === "10000000-15000000") {
+      url += "min_price=10000000&max_price=15000000";
+    } else if (priceRange === "15000000-20000000") {
+      url += "min_price=15000000&max_price=20000000";
+    } else if (priceRange === ">20000000") {
+      url += "min_price=20000000&max_price=";
+    }
+
+    window.location.href = url;
+  }
+</script>
+{% endblock %}

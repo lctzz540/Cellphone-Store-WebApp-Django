@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>{% block title %}{% endblock %}</title>
+  <style>
+    body {
+      background-color: black;
+    }
+
+    .navbar {
+      list-style-type: none;
+      padding: 0;
+      margin: 0;
+      margin-bottom: 20px;
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+    }
+
+    .navbar li {
+      margin-right: 10px;
+    }
+
+    .navbar li:last-child {
+      margin-right: 0;
+    }
+
+    .navbar li a {
+      text-decoration: none;
+    }
+
+    .search-form {
+      display: flex;
+      align-items: center;
+      margin-right: auto;
+    }
+
+    .search-input {
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      font-size: 16px;
+      width: 300px;
+    }
+
+    .search-input:focus {
+      outline: none;
+      border-color: #0066cc;
+      box-shadow: 0 0 5px rgba(0, 102, 204, 0.5);
+    }
+    button{
+      padding: 10px;
+      margin-right: 20px;
+      margin-left: 20px;
+      border: 1px solid #ccc;
+    }
+  </style>
+
+</head>
+
+<body>
+  <header>
+    <!-- Add your header content here -->
+    <nav>
+      <ul class="navbar">
+        <li>
+          <form class="search-form" method="GET" action="{% url 'search_product' %}">
+            <input class="search-input" type="text" name="product_name" placeholder="Search by product name" required>
+            <button type="submit">Search</button>
+          </form>
+        </li>
+        <li><a href="/">Home</a></li>
+        {% if not user.is_authenticated %}
+        <li><a href="/login">Login</a></li>
+        <li><a href="/signup">Sign Up</a></li>
+        {% endif %} {% if user.is_authenticated %}
+        <li>
+          <a href="/cart">Cart</a>
+          <a class="current-user" href="/logout">Welcome {{ user.username }}, logout</a>
+        </li>
+        {% endif %}
+      </ul>
+    </nav>
+  </header>
+
+  <nav>
+    <!-- Add your navigation content here -->
+  </nav>
+
+  <main>
+    {% block content %}
+    <!-- Add your main content here -->
+    {% endblock %}
+  </main>
+
+  <footer>
+    <!-- Add your footer content here -->
+  </footer>
+</body>
+
+</html>

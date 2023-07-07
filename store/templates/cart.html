@@ -1,0 +1,90 @@
+{% extends 'base.html' %} 
+{% block content %}
+
+<style>
+  h1 {
+    font-size: 24px;
+    margin-bottom: 20px;
+  }
+
+  table {
+    width: 70%;
+    border-collapse: collapse;
+    background-color: white;
+  }
+
+  th,
+  td {
+    padding: 10px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+  }
+
+  th {
+    background-color: #f2f2f2;
+    font-weight: bold;
+  }
+
+  tr:nth-child(even) {
+    background-color: #f9f9f9;
+  }
+
+  .remove-button {
+    background-color: red;
+    color: white;
+    text-decoration: none;
+    padding: 5px 10px;
+    margin-right:3px;
+  }
+  .add-button {
+    background-color: green;
+    color: white;
+    text-decoration: none;
+    padding: 5px 10px;
+  }
+  .buy-button {
+    background-color: blue;
+    color: white;
+    text-decoration: none;
+    padding: 5px 10px;
+  }
+</style>
+
+<!-- cart.html -->
+<h1>Cart</h1>
+<table>
+  <thead>
+    <tr>
+      <th>Product</th>
+      <th>Quantity</th>
+      <th>Unit price</th>
+      <th>Total</th>
+      {%if cart.status == "NOTCLOSED"%}
+        <th>Action</th>
+      {%endif%}
+    </tr>
+  </thead>
+  <tbody>
+    {% for cart_item in cart.cartitem_set.all %}
+    <tr>
+      <td>{{ cart_item.product.product_name }}</td>
+      <td>{{ cart_item.quantity }}</td>
+      <td>{{ cart_item.product.price }}</td>
+      <td>{{ cart_item.get_total }}</td>
+      {%if cart.status == "NOTCLOSED"%}
+      <td style="display:flex">
+          <a class="remove-button" href="/remove_from_cart/{{ cart_item.id }}">-</a>
+          <a class="add-button" href="/add_to_cart/{{ cart_item.product.id }}">+</a>
+      </td>
+      {%endif%}
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+<p class="cart-total" style="color:white">Cart Total: {{ cart.get_total }}</p>
+<p class="status" style="color:white">Status: {{ cart.status }}</p>
+{%if cart.status == "NOTCLOSED"%}
+<a class="buy-button" href="/buy/{{ cart.id }}">Buy</a>
+{%endif%}
+
+{% endblock %}
