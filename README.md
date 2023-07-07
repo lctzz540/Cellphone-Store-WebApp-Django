@@ -15,7 +15,7 @@ This is a web application for a cellphone store. It allows users to view and sea
 1. Clone the repository:
 
    ```shell
-   git clone https://github.com/your-username/your-repo.git
+   git clone https://gitlab.com/lctzz540/cellphonestore
    ```
 
    Install the required dependencies:
