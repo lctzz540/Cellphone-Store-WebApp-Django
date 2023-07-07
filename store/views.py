@@ -62,9 +62,7 @@ def user_login(request):
                 request, username=username, password=password
             )
             if user is not None:
-                login(
-                    request, user, backend="django.contrib.auth.backends.ModelBackend"
-                )
+                login(request, user, backend="store.backends.CustomUserModelBackend")
                 return redirect("home")
         else:
             print(form.errors)
