@@ -2,7 +2,6 @@ from django.contrib.auth.hashers import make_password
 from django.contrib import messages
 from django.contrib.auth import login, logout
 from django.contrib.auth.forms import AuthenticationForm
-from .form import UserCreationForm
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import Product, User, Cart, CartItem
 from .backends import CustomUserModelBackend
@@ -11,6 +10,7 @@ from django.views.decorators.csrf import csrf_protect
 from django.core.mail import send_mail
 from django.utils.crypto import get_random_string
 from .models import PasswordResetRequest
+from .forms import UserProfileForm, UserCreationForm
 
 
 def home(request):
@@ -243,3 +243,17 @@ def password_reset(request, token):
         return redirect("login")
 
     return render(request, "password_reset.html", {"token": token})
+
+
+@login_required
+def user_profile(request):
+    user = request.user
+    if request.method == "POST":
+        form = UserProfileForm(request.POST, instance=user)
+        if form.is_valid():
+            form.save()
+            return redirect("user_profile")
+    else:
+        form = UserProfileForm(instance=user)
+
+    return render(request, "profile.html", {"form": form})

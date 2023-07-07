@@ -1,0 +1,51 @@
+
+{% extends 'base.html' %}
+
+{% block content %}
+<style>
+  .user-profile-form {
+    background-color: white;
+    padding: 30px;
+    margin-bottom: 10px;
+  }
+
+  .user-profile-form label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 5px;
+  }
+
+  .user-profile-form input[type="text"],
+  .user-profile-form input[type="email"] {
+    padding: 5px;
+    width: 200px;
+    margin-bottom: 5px;
+  }
+
+  .user-profile-form button[type="submit"] {
+    padding: 8px 16px;
+    background-color: #4caf50;
+    color: white;
+    border: none;
+    cursor: pointer;
+  }
+</style>
+
+<div class="user-profile-form">
+  <h2>User Profile</h2>
+  <form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+
+    {% if messages %}
+      <ul class="messages">
+        {% for message in messages %}
+          <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+        {% endfor %}
+      </ul>
+    {% endif %}
+
+    <button type="submit">Update Information</button>
+  </form>
+</div>
+{% endblock %}

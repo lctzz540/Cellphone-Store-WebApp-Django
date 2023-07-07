@@ -37,6 +37,13 @@ class User(AbstractUser):
         return self.is_active
 
 
+class UserProfile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    # Add additional fields for user information
+    phone_number = models.CharField(max_length=20)
+    address = models.CharField(max_length=255)
+
+
 class Cart(models.Model):
     STATUS_CHOICES = (
         ("NOTCLOSED", "Not closed"),

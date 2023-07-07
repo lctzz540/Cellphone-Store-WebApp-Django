@@ -31,6 +31,7 @@ from store.views import (
     search_and_filter,
     password_reset,
     password_reset_request,
+    user_profile,
 )
 
 urlpatterns = [
@@ -59,4 +60,5 @@ urlpatterns = [
         "password-reset-request/", password_reset_request, name="password_reset_request"
     ),
     path("password-reset/<str:token>/", password_reset, name="password_reset"),
+    path("profile/", user_profile, name="user_profile"),
 ]
