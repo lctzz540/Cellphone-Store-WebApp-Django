@@ -52,7 +52,8 @@ class Cart(models.Model):
         ("ALREADY", "Already"),
     )
 
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="carts")
+    user = models.ForeignKey(
+        User, on_delete=models.CASCADE, related_name="carts")
     products = models.ManyToManyField(Product, through="CartItem")
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)

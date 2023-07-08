@@ -1,10 +1,9 @@
 from django.contrib.auth.forms import (
-    PasswordChangeForm,
     UserCreationForm,
     UserChangeForm,
 )
 from django import forms
-from .models import User
+from store.models import User
 
 
 class UserCreationForm(UserCreationForm):
@@ -23,4 +22,5 @@ class UserProfileForm(UserChangeForm):
 
     class Meta:
         model = User
-        fields = ("first_name", "last_name", "email", "phone_number", "address")
+        fields = ("first_name", "last_name",
+                  "email", "phone_number", "address")
