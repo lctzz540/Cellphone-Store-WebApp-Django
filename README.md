@@ -40,7 +40,7 @@ This is a web application for a cellphone store. It allows users to view and sea
    Access the application in your web browser at <http://localhost:8000>.
 
 2. Dump data:
-   You can also use data which I have crawled by load the `database_dump.sql`. Or you can use it if you have issues about database
+   You can also use data which is crawled by load the `database_dump.sql`. Or you can use it if you have issues about database
 
 3. Add admin:
 
