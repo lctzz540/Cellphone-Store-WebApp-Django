@@ -26,6 +26,7 @@ for _ in range(10):
     except:
         time.sleep(1)
         continue
+
 for i in range(1000):
     try:
         product_path = (

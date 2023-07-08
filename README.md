@@ -39,6 +39,17 @@ This is a web application for a cellphone store. It allows users to view and sea
 
    Access the application in your web browser at <http://localhost:8000>.
 
+2. Dump data:
+   You can also use data which I have crawled by load the `database_dump.sql`. Or you can use it if you have issues about database
+
+3. Add admin:
+
+   Run Command below for adding admin (login to /admin):
+
+   ```shell
+   python manage.py createsuperuser
+   ```
+
 ## Usage
 
 - Sign up for a new account or log in with your existing credentials.
