@@ -13,6 +13,9 @@ class Product(models.Model):
     price = models.CharField(max_length=255)
     price_int = models.IntegerField(default=0)
 
+    def __str__(self):
+        return self.product_name
+
 
 class User(AbstractUser):
     phone_number = models.CharField(max_length=20)
@@ -52,7 +55,8 @@ class Cart(models.Model):
         ("ALREADY", "Already"),
     )
 
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="carts")
+    user = models.ForeignKey(
+        User, on_delete=models.CASCADE, related_name="carts")
     products = models.ManyToManyField(Product, through="CartItem")
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -76,7 +80,7 @@ class CartItem(models.Model):
     quantity = models.PositiveIntegerField(default=1)
 
     def __str__(self):
-        return f"CartItem: {self.product.name} - Quantity: {self.quantity}"
+        return f"CartItem: {self.product.product_name} - Quantity: {self.quantity}"
 
     def get_subtotal(self):
         price = self.product.price.replace(".", "").replace("₫", "")
