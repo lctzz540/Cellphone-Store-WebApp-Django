@@ -38,10 +38,12 @@ def user_signup(request):
                 return redirect("home")
         else:
             print("Form is not valid:", form.errors)
+            messages.error(
+                request, "Error during signup. Please check the form fields."
+            )
 
     else:
         form = UserCreationForm()
-
     return render(request, "signup.html", {"form": form})
 
 
@@ -60,6 +62,7 @@ def user_login(request):
                 return redirect("home")
         else:
             print(form.errors)
+            messages.error(request, "Invalid username or password")
     else:
         form = AuthenticationForm()
     return render(request, "login.html", {"form": form})
@@ -76,19 +79,16 @@ def password_reset_request(request):
         try:
             user = User.objects.get(email=email)
         except User.DoesNotExist:
-            # Handle case where email is not found
             return render(
-                request, "password_reset_request.html", {"message": "Email not found."}
+                request, "password_reset_request.html", {
+                    "message": "Email not found."}
             )
 
-        # Generate a unique token
         token = get_random_string(length=32)
 
-        # Save the password reset request in the database
         reset_request = PasswordResetRequest(user=user, token=token)
         reset_request.save()
 
-        # Send email with password reset link
         reset_link = f"http://{request.get_host()}/password-reset/{token}"
         send_mail(
             "Password Reset",
@@ -128,7 +128,6 @@ def password_reset(request, token):
         user.password = make_password(password)
         user.save()
 
-        # Delete the password reset request from the database
         reset_request.delete()
 
         messages.success(

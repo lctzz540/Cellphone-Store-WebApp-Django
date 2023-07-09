@@ -38,6 +38,10 @@
     text-align: center;
     margin-top: 10px;
   }
+  .error-message {
+    color: red;
+    margin-top: 10px;
+  }
 </style>
 <div class="login-container">
   <form method="post" class="login-form">
@@ -58,6 +62,14 @@
   <div class="forgot-password-link">
     <a href="{% url 'signup' %}">Sign Up</a>
   </div>
+  {% if messages %}
+    <ul class="error-message">
+        {% for message in messages %}
+            <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+        {% endfor %}
+    </ul>
+  {% endif %}
   </form>
+  
 </div>
 {% endblock %}
