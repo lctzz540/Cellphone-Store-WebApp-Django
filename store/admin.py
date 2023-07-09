@@ -18,8 +18,7 @@ class CartAdmin(admin.ModelAdmin):
         "created_at",
         "status",
     )
-    list_filter = ("status",)  # Add filter by status
-    # Make the status field editable in the list view
+    list_filter = ("status",)
     list_editable = ("status",)
     inlines = [CartItemInline]
 
@@ -47,6 +46,10 @@ class CartAdmin(admin.ModelAdmin):
         return obj.get_total()
 
     get_cart_total.short_description = "Total"
+
+    def get_queryset(self, request):
+        queryset = super().get_queryset(request)
+        return queryset.exclude(status="NOTCLOSED")
 
 
 class ProductAdmin(admin.ModelAdmin):

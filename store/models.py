@@ -11,7 +11,7 @@ class Product(models.Model):
     RAM = models.CharField(max_length=255)
     ROM = models.CharField(max_length=255)
     price = models.CharField(max_length=255)
-    price_int = models.IntegerField()
+    price_int = models.IntegerField(default=0)
 
 
 class User(AbstractUser):
@@ -52,8 +52,7 @@ class Cart(models.Model):
         ("ALREADY", "Already"),
     )
 
-    user = models.ForeignKey(
-        User, on_delete=models.CASCADE, related_name="carts")
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="carts")
     products = models.ManyToManyField(Product, through="CartItem")
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
