@@ -80,8 +80,7 @@ def password_reset_request(request):
             user = User.objects.get(email=email)
         except User.DoesNotExist:
             return render(
-                request, "password_reset_request.html", {
-                    "message": "Email not found."}
+                request, "password_reset_request.html", {"message": "Email not found."}
             )
 
         token = get_random_string(length=32)
@@ -134,7 +133,7 @@ def password_reset(request, token):
             request,
             "Password reset successful. You can now log in with your new password.",
         )
-        return redirect("login")
+        return redirect("user_login")
 
     return render(request, "password_reset.html", {"token": token})
 

@@ -16,6 +16,7 @@ class CartAdmin(admin.ModelAdmin):
         "get_cart_items",
         "get_cart_total",
         "created_at",
+        "payment_method",
         "status",
     )
     list_filter = ("status",)

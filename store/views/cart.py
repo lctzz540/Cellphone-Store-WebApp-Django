@@ -56,6 +56,17 @@ def remove_from_cart(request, cart_item_id):
 def buy(request, cart_id):
     cart = get_object_or_404(Cart, id=cart_id)
     cart.status = "PENDING"
+    cart.payment_method = "CASH"
+    cart.save()
+    return redirect("cart")
+
+
+@csrf_protect
+@login_required
+def paypal(request, cart_id):
+    cart = get_object_or_404(Cart, id=cart_id)
+    cart.status = "PENDING"
+    cart.payment_method = "PAYPAL"
     cart.save()
     return redirect("cart")
 
@@ -63,4 +74,14 @@ def buy(request, cart_id):
 @login_required
 def create_cart(request):
     Cart.objects.create(user=request.user)
+    return redirect("cart")
+
+
+@login_required
+def delete_cart(request, cart_id):
+    cart = get_object_or_404(Cart, id=cart_id)
+
+    if cart.status == "PENDING":
+        cart.delete()
+
     return redirect("cart")

@@ -18,7 +18,15 @@ from django.contrib import admin
 from django.urls import path
 
 from store.views.page import home, product_detail
-from store.views.cart import cart, add_to_cart, remove_from_cart, buy, create_cart
+from store.views.cart import (
+    cart,
+    add_to_cart,
+    remove_from_cart,
+    buy,
+    create_cart,
+    delete_cart,
+    paypal,
+)
 from store.views.product import search_product, filter_product, search_and_filter
 from store.views.user import (
     user_signup,
@@ -38,6 +46,7 @@ urlpatterns = [
     path("signup/", user_signup, name="signup"),
     path("cart/", cart, name="cart"),
     path("add_to_cart/<int:product_id>/", add_to_cart, name="add_to_cart"),
+    path("cart/delete/<int:cart_id>/", delete_cart, name="delete_cart"),
     path("product-detail/<int:product_id>/", product_detail, name="product_detail"),
     path(
         "remove_from_cart/<int:cart_item_id>/",
@@ -49,6 +58,11 @@ urlpatterns = [
         buy,
         name="buy",
     ),
+    path(
+        "payment-success/<int:cart_id>/",
+        buy,
+        name="payment-success",
+    ),
     path("search/", search_product, name="search_product"),
     path("filter/", filter_product, name="filter_product"),
     path("search/filter/", search_and_filter, name="search_and_filter_product"),
@@ -58,4 +72,5 @@ urlpatterns = [
     path("password-reset/<str:token>/", password_reset, name="password_reset"),
     path("profile/", user_profile, name="user_profile"),
     path("create-cart/", create_cart, name="create_cart"),
+    path("paypal", paypal, name="paypal"),
 ]

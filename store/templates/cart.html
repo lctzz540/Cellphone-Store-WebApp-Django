@@ -103,18 +103,48 @@
   <p>Name: {{ cart.user.username }}</p>
   <p>Address: {{ cart.user.address }}</p>
   <p>Phone: {{ cart.user.phone_number }}</p>
-  <p class="cart-total">Cart Total: {{ cart.get_total }}</p>
+  <p class="cart-total" id="{{cart.id}}">Cart Total: {{ cart.get_total }}</p>
   <p class="status">Status: {{ cart.status }}</p>
-{% if cart.status == "NOTCLOSED" and cart.products.count != 0 %}
-  <a class="buy-button" href="/buy/{{ cart.id }}">Buy</a>
+  {% if cart.status == "NOTCLOSED" and cart.products.count != 0 %}
+  <a class="buy-button" href="{% url 'buy' cart_id=cart.id %}"  >Payment in Cart</a>
+    <div id="paypal-button-{{ cart.id }}"></div>
   {% endif %}
-{% if forloop.last %}
-  {% if cart.status != "NOTCLOSED" %}
-<a href="{% url 'create_cart' %}">Create New Cart</a>
+  {% if cart.status == "PENDING" %}
+    <a href="{% url 'delete_cart' cart_id=cart.id %}">Delete cart</a>
   {% endif %}
-{% endif %}
+  {% if forloop.last %}
+    {% if cart.status != "NOTCLOSED" %}
+      <a href="{% url 'create_cart' %}">Create New Cart</a>
+    {% endif %}
+  {% endif %}
 </div>
 {% endfor %}
 
+<script src="https://www.paypal.com/sdk/js?client-id=AbXnulzyv21RYL_-rLp9YENyLZEWDstWnq00IT6t_iGjTt6SLjZSDRJHnyfTCS02bvuGE94iIRatNHkG"></script>
+
+<script>
+  {% for cart in user.carts.all %}
+  {% if forloop.last %}
+  paypal.Buttons({
+    createOrder: function(data, actions) {
+      var price = parseInt(document.getElementById("{{cart.id}}").innerText.replace(/\D/g, "")) / 23000;
+      console.log(price)
+      return actions.order.create({
+        purchase_units: [{
+          amount: {
+            value: price.toFixed(2),
+            currency_code: "USD"
+          }
+        }]
+      });
+    },    onApprove: function(data, actions) {
+      return actions.order.capture().then(function(details) {
+        window.location.href = '/paypal';
+      });
+    }
+  }).render('#paypal-button-{{ cart.id }}');
+  {% endif %}
+  {% endfor %}
+</script>
 
 {% endblock %}

@@ -54,15 +54,19 @@ class Cart(models.Model):
         ("SHIPPING", "Shipping"),
         ("ALREADY", "Already"),
     )
+    PAYMENT_METHOD_CHOICES = (
+        ("CASH", "Cash"),
+        ("PAYPAL", "PayPal"),
+    )
 
-    user = models.ForeignKey(
-        User, on_delete=models.CASCADE, related_name="carts")
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="carts")
     products = models.ManyToManyField(Product, through="CartItem")
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     status = models.CharField(
         max_length=20, choices=STATUS_CHOICES, default="NOTCLOSED"
     )
+    payment_method = models.CharField(max_length=20, choices=PAYMENT_METHOD_CHOICES)
 
     def __str__(self):
         return f"Cart for {self.user.username}"
