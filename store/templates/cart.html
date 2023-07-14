@@ -139,7 +139,7 @@
       });
     },    onApprove: function(data, actions) {
       return actions.order.capture().then(function(details) {
-        window.location.href = '/paypal';
+        window.location.href = "{% url 'paypal' cart_id=cart.id %}";
       });
     }
   }).render('#paypal-button-{{ cart.id }}');

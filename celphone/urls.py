@@ -47,7 +47,8 @@ urlpatterns = [
     path("cart/", cart, name="cart"),
     path("add_to_cart/<int:product_id>/", add_to_cart, name="add_to_cart"),
     path("cart/delete/<int:cart_id>/", delete_cart, name="delete_cart"),
-    path("product-detail/<int:product_id>/", product_detail, name="product_detail"),
+    path("product-detail/<int:product_id>/",
+         product_detail, name="product_detail"),
     path(
         "remove_from_cart/<int:cart_item_id>/",
         remove_from_cart,
@@ -65,12 +66,13 @@ urlpatterns = [
     ),
     path("search/", search_product, name="search_product"),
     path("filter/", filter_product, name="filter_product"),
-    path("search/filter/", search_and_filter, name="search_and_filter_product"),
+    path("search/filter/", search_and_filter,
+         name="search_and_filter_product"),
     path(
         "password-reset-request/", password_reset_request, name="password_reset_request"
     ),
     path("password-reset/<str:token>/", password_reset, name="password_reset"),
     path("profile/", user_profile, name="user_profile"),
     path("create-cart/", create_cart, name="create_cart"),
-    path("paypal", paypal, name="paypal"),
+    path("paypal/<int:cart_id>/", paypal, name="paypal"),
 ]
